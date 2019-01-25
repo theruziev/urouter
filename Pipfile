@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+pytest = "*"
+aiohttp = "*"
+"flake8" = "*"
+pytest-asyncio = "*"
+codecov = "*"
+coverage = "*"
+black = "==18.9b0"
+sphinx = "*"
+
+
+[requires]
+python_version = "3.6"
+
+[pipenv]
+allow_prereleases = true
