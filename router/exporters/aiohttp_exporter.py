@@ -1,11 +1,13 @@
+# Reference: https://github.com/rob-blackbourn/aiohttp-route-middleware
 import logging
 from functools import partial
+from typing import Callable
+from router.constants import Method as mt
 from router import Router
 from aiohttp import web
 
-logger = logging.getLogger(__name__)
 
-# Reference: https://github.com/rob-blackbourn/aiohttp-route-middleware
+logger = logging.getLogger(__name__)
 
 
 class AioHttpRouter(Router):
@@ -42,4 +44,15 @@ class AioHttpRouter(Router):
         handlers = self.get_handlers()
         for route in handlers.values():
             handler = self._make_handler(route.handler, route.middlewares)
-            self.app.router.add_route(route.method.value, route.pattern, handler)
+            self.app.router.add_route(route.method, route.pattern, handler)
+
+    def handle(self, pattern: str, handler: Callable):
+        self.method("*", pattern, handler)
+
+    def method(self, method: str, pattern: str, handler: Callable, middlewares=None):
+        if method in [mt.HEAD.value, mt.TRACE.value, mt.CONNECT.value]:
+            raise NotImplementedError(f"Method: {method} not implemented.")
+        super().method(method, pattern, handler, middlewares)
+
+    def make_router(self):
+        return AioHttpRouter(self.app)

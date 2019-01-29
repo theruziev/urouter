@@ -1,3 +1,5 @@
+cov-report = true
+
 lint:
 	pipenv run flake8 router
 	pipenv run black -l 100 --check tests router
