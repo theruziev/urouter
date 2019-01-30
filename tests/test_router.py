@@ -1,6 +1,6 @@
 import pytest
 
-from router import Router, Route
+from router.api import Route, Router
 from router.constants import Method as mt
 
 
@@ -19,11 +19,11 @@ from router.constants import Method as mt
     ],
 )
 def test_route_methods(method, pattern, handler):
-    r = Router()
-    http_method = getattr(r, method.value.lower())
+    router = Router()
+    http_method = getattr(router, method.value.lower())
     http_method(pattern, handler)
 
-    route = r.get_handlers()[(method.value, pattern)]
+    route = router.get_handlers()[(method.value, pattern)]
     assert isinstance(route, Route)
     assert route.pattern == pattern
     assert route.method == method.value
@@ -32,11 +32,11 @@ def test_route_methods(method, pattern, handler):
 
 def test_route_handle():
     method, pattern, handler = (mt.ANY, "/any", lambda x: mt.ANY.value)
-    r = Router()
+    router = Router()
 
-    r.handle(pattern, handler)
+    router.handle(pattern, handler)
 
-    route = r.get_handlers()[(method.value, pattern)]
+    route = router.get_handlers()[(method.value, pattern)]
     assert isinstance(route, Route)
     assert route.pattern == pattern
     assert route.method == method.value
@@ -44,16 +44,16 @@ def test_route_handle():
 
 
 def test_route_mount():
-    r = Router()
+    router = Router()
 
-    r.get("/hello", lambda x: x)
+    router.get("/hello", lambda x: x)
 
-    r2 = Router()
-    r2.get("/sub-hello", lambda x: x)
+    router2 = Router()
+    router2.get("/sub-hello", lambda x: x)
 
-    r.mount("/sub/", r2)
+    router.mount("/sub/", router2)
 
-    route = r.get_handlers()[(mt.GET.value, "/sub/sub-hello")]
+    route = router.get_handlers()[(mt.GET.value, "/sub/sub-hello")]
     assert isinstance(route, Route)
     assert route.pattern == "/sub/sub-hello"
     assert route.method == mt.GET.value
@@ -61,33 +61,33 @@ def test_route_mount():
 
 
 def test_duplicate_route():
-    r = Router()
+    router = Router()
 
-    r.get("/hello", lambda x: x)
-    r.get("/hello/world", lambda x: x)
+    router.get("/hello", lambda x: x)
+    router.get("/hello/world", lambda x: x)
 
     with pytest.raises(TypeError):
-        r.get("/hello", lambda x: x)
+        router.get("/hello", lambda x: x)
 
-    r2 = Router()
-    r2.get("world", lambda x: x)
+    router2 = Router()
+    router2.get("world", lambda x: x)
     with pytest.raises(TypeError):
-        r.mount("/hello/", r2)
+        router.mount("/hello/", router2)
 
 
 def test_route_use_middleware():
-    r = Router().use(lambda x: x).use(lambda x: x * 2)
+    router = Router().use(lambda x: x).use(lambda x: x * 2)
 
-    r.get("/hello", lambda x: x)
-    assert len(r._handlers[(mt.GET.value, "/hello")].middlewares) == 2
+    router.get("/hello", lambda x: x)
+    assert len(router._handlers[(mt.GET.value, "/hello")].middlewares) == 2
 
 
 def test_route_inline_middleware():
-    r = Router().use(lambda x: x).use(lambda x: x * 2)
+    router = Router().use(lambda x: x).use(lambda x: x * 2)
 
-    r.include(lambda x: x * 3).get("/hello", lambda x: x)
-    assert len(r.get_handlers()[(mt.GET.value, "/hello")].middlewares) == 3
-    assert not r._inline_middlewares
+    router.include(lambda x: x * 3).get("/hello", lambda x: x)
+    assert len(router.get_handlers()[(mt.GET.value, "/hello")].middlewares) == 3
+    assert not router._inline_middlewares
 
 
 def test_make_router():

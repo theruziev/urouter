@@ -1,7 +1,6 @@
 import pytest
 from aiohttp import web
 
-from router import Router, Route
 from router.constants import Method as mt
 from router.exporters.aiohttp_exporter import AioHttpRouter
 
@@ -26,11 +25,11 @@ def make_request_factory(value):
 )
 async def test_route_methods(method, pattern, aiohttp_client, loop):
     app = web.Application()
-    r = AioHttpRouter(app)
-    http_method = getattr(r, method.value.lower())
+    router = AioHttpRouter(app)
+    http_method = getattr(router, method.value.lower())
     http_method(pattern, make_request_factory(method.value))
 
-    r.export()
+    router.export()
 
     client = await aiohttp_client(app)
     caller = getattr(client, method.value.lower())
@@ -145,9 +144,9 @@ async def test_route_inline_middleware(aiohttp_client, loop):
         return web.Response(text=text)
 
     app = web.Application()
-    r = AioHttpRouter(app).use(error_middleware).use(info_middleware)
-    r.get("/hello", handler)
-    r.export()
+    router = AioHttpRouter(app).use(error_middleware).use(info_middleware)
+    router.get("/hello", handler)
+    router.export()
     client = await aiohttp_client(app)
 
     resp = await client.get("/hello")
