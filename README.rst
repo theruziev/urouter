@@ -86,7 +86,7 @@ Quickstart
     # Registered all route in aiohttp
     router.export()
 
-**Sub router**
+**Define sub router**
 
 .. code-block:: python
 
