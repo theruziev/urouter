@@ -6,6 +6,7 @@ Router
         :target: https://codecov.io/gh/bruziev/router
 
 
+
 **This is POC, not for production use**
 
 Installation
@@ -30,7 +31,7 @@ Quickstart
 
     router.get("/home", handler)
 
-    # Registered all route in aiohttp
+    # At this point aiohttp is ready to register all routes
     router.export()
 
 
@@ -57,11 +58,11 @@ Quickstart
     # Register handler
     router.get("/home", handler)
 
-    # Registered all route in aiohttp
+    # At this point aiohttp is ready to register all routes
     router.export()
 
 
-**Define inline middleware(Run only for specific handler)**
+**Define inline middleware (run only for specific handler)**
 
 .. code-block:: python
 
@@ -83,10 +84,10 @@ Quickstart
     # Middleware registered only for `/home` route
     router.include(info_middleware).get("/home", handler)
 
-    # Registered all route in aiohttp
+    # At this point aiohttp is ready to register all routes
     router.export()
 
-**Define sub router**
+**Define subrouter**
 
 .. code-block:: python
 
@@ -112,12 +113,12 @@ Quickstart
     router.include(info_middleware).get("/home", handler)
     
     # Create new router
-    sub_router = router.make_router()
-    sub_router.get("/hello", sub_handler)
+    subrouter = router.make_router()
+    subrouter.get("/hello", sub_handler)
 
     # All registered router become starts with prefix `/sub/` 
-    # `/hello` become `/sub/hello`
-    router.mount("/sub", sub_router)
+    # `/hello` becomes `/sub/hello`
+    router.mount("/sub", subrouter)
 
-    # Registered all route in aiohttp
+    # At this point aiohttp is ready to register all routes
     router.export()
