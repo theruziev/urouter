@@ -122,3 +122,37 @@ Quickstart
 
     # At this point aiohttp is ready to register all routes
     router.export()
+
+**Private/Public router**
+
+.. code-block:: python
+
+    from aiohttp import web
+    from router.exporters.aiohttp_exporter import AioHttpRouter
+    app = web.Application()
+
+    @web.middleware
+    async def auth_middleware(request, handler):
+
+        return web.HTTPForbidden()
+
+    async def public(request):
+        return web.Response(text="Hello World")
+
+    async def private(request):
+        return web.Response(text="Private Zone")
+
+    router = AioHttpRouter(app)
+    private_route = router.make_router().use(auth_middleware)
+
+    # Adding public handler
+    router.get("/home", public)
+    
+    # Adding public handler
+    private_route.get("/private", private)
+    
+    # Mount private router to main router
+    router.mount("/", private_route)
+
+    # At this point aiohttp is ready to register all routes
+    router.export()
