@@ -44,15 +44,15 @@ class AioHttpRouter(Router):
         handlers = self.get_handlers()
         for route in handlers.values():
             handler = self._make_handler(route.handler, route.middlewares)
-            self.app.router.add_route(route.method, route.pattern, handler)
+            self.app.router.add_route(route.method, route.pattern, handler, name=route.name)
 
     def handle(self, pattern: str, handler: Callable):
         self.method("*", pattern, handler)
 
-    def method(self, method: str, pattern: str, handler: Callable, middlewares=None):
+    def method(self, method: str, pattern: str, handler: Callable, middlewares=None, name=None):
         if method in [mt.HEAD.value, mt.TRACE.value, mt.CONNECT.value]:
             raise NotImplementedError(f"Method: {method} not implemented.")
-        super().method(method, pattern, handler, middlewares)
+        super().method(method, pattern, handler, middlewares, name)
 
     def make_router(self):
         return AioHttpRouter(self.app)

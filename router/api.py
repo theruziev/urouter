@@ -12,12 +12,14 @@ class Route:
     method = None
     middlewares = None
     pattern = None
+    name = None
 
-    def __init__(self, method, pattern, handler, middlewares=None):
+    def __init__(self, method, pattern, handler, *, middlewares=None, name=None):
         self.handler = handler
         self.method = method
         self.pattern = pattern
         self.middlewares = middlewares or []
+        self.name = name
 
 
 class Router:
@@ -57,41 +59,43 @@ class Router:
         self._inline_middlewares.append(inline_middleware)
         return self
 
-    def method(self, method: str, pattern: str, handler: Callable, middlewares=None):
+    def method(self, method: str, pattern: str, handler: Callable, middlewares=None, name=None):
         middlewares = middlewares or []
         all_middlewares = self._middlewares + self._get_inline_middlewares() + middlewares
 
         if (method, pattern) not in self._handlers:
-            self._handlers[(method, pattern)] = Route(method, pattern, handler, all_middlewares)
+            self._handlers[(method, pattern)] = Route(
+                method, pattern, handler, middlewares=all_middlewares, name=name
+            )
             return
         raise TypeError("Duplicate pattern and method")
 
-    def connect(self, pattern: str, handler: Callable):
-        self.method(mt.CONNECT.value, pattern, handler)
+    def connect(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.CONNECT.value, pattern, handler, name=name)
 
-    def delete(self, pattern: str, handler: Callable):
-        self.method(mt.DELETE.value, pattern, handler)
+    def delete(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.DELETE.value, pattern, handler, name=name)
 
-    def get(self, pattern: str, handler: Callable):
-        self.method(mt.GET.value, pattern, handler)
+    def get(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.GET.value, pattern, handler, name=name)
 
-    def head(self, pattern: str, handler: Callable):
-        self.method(mt.HEAD.value, pattern, handler)
+    def head(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.HEAD.value, pattern, handler, name=name)
 
-    def options(self, pattern: str, handler: Callable):
-        self.method(mt.OPTIONS.value, pattern, handler)
+    def options(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.OPTIONS.value, pattern, handler, name=name)
 
-    def patch(self, pattern: str, handler: Callable):
-        self.method(mt.PATCH.value, pattern, handler)
+    def patch(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.PATCH.value, pattern, handler, name=name)
 
-    def post(self, pattern: str, handler: Callable):
-        self.method(mt.POST.value, pattern, handler)
+    def post(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.POST.value, pattern, handler, name=name)
 
-    def put(self, pattern: str, handler: Callable):
-        self.method(mt.PUT.value, pattern, handler)
+    def put(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.PUT.value, pattern, handler, name=name)
 
-    def trace(self, pattern: str, handler: Callable):
-        self.method(mt.TRACE.value, pattern, handler)
+    def trace(self, pattern: str, handler: Callable, name: str = None):
+        self.method(mt.TRACE.value, pattern, handler, name=name)
 
     def get_handlers(self) -> Dict[tuple, Route]:
         return self._handlers
