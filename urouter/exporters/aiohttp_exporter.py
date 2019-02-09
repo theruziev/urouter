@@ -2,8 +2,8 @@
 import logging
 from functools import partial
 from typing import Callable
-from router.constants import Method as mt
-from router.api import Router
+from urouter.constants import Method as mt
+from urouter.api import Router
 from aiohttp import web
 
 

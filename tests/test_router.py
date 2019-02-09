@@ -1,7 +1,7 @@
 import pytest
 
-from router.api import Route, Router
-from router.constants import Method as mt
+from urouter.api import Route, Router
+from urouter.constants import Method as mt
 
 
 @pytest.mark.parametrize(

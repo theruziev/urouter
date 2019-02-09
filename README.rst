@@ -1,9 +1,9 @@
-Router
+uRouter
 ========
-.. image:: https://img.shields.io/travis/com/bruziev/router.svg?style=flat-square
-        :target: https://travis-ci.com/bruziev/router
-.. image:: https://img.shields.io/codecov/c/github/bruziev/router.svg?style=flat-square
-        :target: https://codecov.io/gh/bruziev/router
+.. image:: https://img.shields.io/travis/com/bruziev/urouter.svg?style=flat-square
+        :target: https://travis-ci.com/bruziev/urouter
+.. image:: https://img.shields.io/codecov/c/github/bruziev/urouter.svg?style=flat-square
+        :target: https://codecov.io/gh/bruziev/urouter
 
 
 
@@ -11,7 +11,10 @@ Router
 
 Installation
 ------------
-TODO
+
+.. code-block:: bash
+
+    pip install urouter
 
 Quickstart
 ----------
@@ -21,7 +24,7 @@ Quickstart
 .. code-block:: python
 
     from aiohttp import web
-    from router.exporters.aiohttp_exporter import AioHttpRouter
+    from urouter.exporters.aiohttp_exporter import AioHttpRouter
     app = web.Application()
 
      async def handler(request):
@@ -40,7 +43,7 @@ Quickstart
 .. code-block:: python
 
     from aiohttp import web
-    from router.exporters.aiohttp_exporter import AioHttpRouter
+    from urouter.exporters.aiohttp_exporter import AioHttpRouter
     app = web.Application()
 
     @web.middleware
@@ -67,7 +70,7 @@ Quickstart
 .. code-block:: python
 
     from aiohttp import web
-    from router.exporters.aiohttp_exporter import AioHttpRouter
+    from urouter.exporters.aiohttp_exporter import AioHttpRouter
     app = web.Application()
 
     @web.middleware
@@ -92,7 +95,7 @@ Quickstart
 .. code-block:: python
 
     from aiohttp import web
-    from router.exporters.aiohttp_exporter import AioHttpRouter
+    from urouter.exporters.aiohttp_exporter import AioHttpRouter
     app = web.Application()
 
     @web.middleware
@@ -128,7 +131,7 @@ Quickstart
 .. code-block:: python
 
     from aiohttp import web
-    from router.exporters.aiohttp_exporter import AioHttpRouter
+    from urouter.exporters.aiohttp_exporter import AioHttpRouter
     app = web.Application()
 
     @web.middleware

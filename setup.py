@@ -1,11 +1,11 @@
 import setuptools
 from setuptools import setup
-from router import __version__
+from urouter import __version__
 
 setup(
-    name='router',
+    name='urouter',
     version=__version__,
-    url='https://github.com/bruziev/router',
+    url='https://github.com/bruziev/urouter',
     license='MIT',
     author='Bakhtiyor Ruziev',
     author_email='bakhtiyor.ruziev@yandex.ru',
