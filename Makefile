@@ -1,11 +1,11 @@
 cov-report = true
 
 lint:
-	pipenv run flake8 router
-	pipenv run black -l 100 --check tests router
+	pipenv run flake8 urouter
+	pipenv run black -l 100 --check tests urouter
 
 format:
-	pipenv run black -l 100 tests router
+	pipenv run black -l 100 tests urouter
 
 install-dev:
 	pipenv install --skip-lock -d
@@ -17,10 +17,5 @@ test:
     pipenv run coverage report;\
 	fi
 
-_release:
-	scripts/make_release
-
-release: test _release
-
 freeze:
-	pipenv lock -d
+	pipenv lcock -d

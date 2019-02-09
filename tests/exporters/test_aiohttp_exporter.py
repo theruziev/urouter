@@ -1,8 +1,8 @@
 import pytest
 from aiohttp import web
 
-from router.constants import Method as mt
-from router.exporters.aiohttp_exporter import AioHttpRouter
+from urouter.constants import Method as mt
+from urouter.exporters.aiohttp_exporter import AioHttpRouter
 
 
 def make_request_factory(value):
