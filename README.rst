@@ -1,9 +1,9 @@
 uRouter
 ========
-.. image:: https://img.shields.io/travis/com/bruziev/urouter.svg?style=flat-square
-        :target: https://travis-ci.com/bruziev/urouter
-.. image:: https://img.shields.io/codecov/c/github/bruziev/urouter.svg?style=flat-square
-        :target: https://codecov.io/gh/bruziev/urouter
+.. image:: https://img.shields.io/travis/com/theruziev/urouter.svg?style=flat-square
+        :target: https://travis-ci.com/theruziev/urouter
+.. image:: https://img.shields.io/codecov/c/github/theruziev/urouter.svg?style=flat-square
+        :target: https://codecov.io/gh/theruziev/urouter
 
 
 
