@@ -26,17 +26,17 @@ def make_request_factory(value):
 async def test_route_methods(method, pattern, aiohttp_client, loop):
     app = web.Application()
     router = AioHttpRouter(app)
-    http_method = getattr(router, method.value.lower())
-    http_method(pattern, make_request_factory(method.value))
+    http_method = getattr(router, method.lower())
+    http_method(pattern, make_request_factory(method))
 
     router.export()
 
     client = await aiohttp_client(app)
-    caller = getattr(client, method.value.lower())
+    caller = getattr(client, method.lower())
     resp = await caller(pattern)
     assert resp.status == 200
     text = await resp.text()
-    assert text == method.value
+    assert text == method
 
 
 @pytest.mark.parametrize(
@@ -53,16 +53,16 @@ async def test_route_methods(method, pattern, aiohttp_client, loop):
 async def test_route_handle(method, pattern, aiohttp_client, loop):
     app = web.Application()
     router = AioHttpRouter(app)
-    router.handle(pattern, make_request_factory(method.value))
+    router.handle(pattern, make_request_factory(method))
 
     router.export()
 
     client = await aiohttp_client(app)
-    caller = getattr(client, method.value.lower())
+    caller = getattr(client, method.lower())
     resp = await caller(pattern)
     assert resp.status == 200
     text = await resp.text()
-    assert text == method.value
+    assert text == method
 
 
 async def test_route_mount(aiohttp_client, loop):
@@ -92,19 +92,16 @@ async def test_route_mount(aiohttp_client, loop):
 
 
 async def test_route_use_middleware(aiohttp_client, loop):
-    @web.middleware
     async def error_middleware(request, handler):
         request["m1"] = "error"
         response = await handler(request)
         return response
 
-    @web.middleware
     async def info_middleware(request, handler):
         request["m2"] = "info"
         response = await handler(request)
         return response
 
-    @web.middleware
     async def inline_middleware(request, handler):
         request["m3"] = "inline"
         response = await handler(request)
@@ -127,13 +124,11 @@ async def test_route_use_middleware(aiohttp_client, loop):
 
 
 async def test_route_inline_middleware(aiohttp_client, loop):
-    @web.middleware
     async def error_middleware(request, handler):
         request["m1"] = "error"
         response = await handler(request)
         return response
 
-    @web.middleware
     async def info_middleware(request, handler):
         request["m2"] = "info"
         response = await handler(request)
@@ -143,9 +138,15 @@ async def test_route_inline_middleware(aiohttp_client, loop):
         text = "{}_{}".format(request["m1"], request["m2"])
         return web.Response(text=text)
 
+    async def handler2(request):
+        assert "m2" not in request
+        text = "{}".format(request["m1"])
+        return web.Response(text=text)
+
     app = web.Application()
-    router = AioHttpRouter(app).use(error_middleware).use(info_middleware)
-    router.get("/hello", handler)
+    router = AioHttpRouter(app).use(error_middleware)
+    router.include(info_middleware).get("/hello", handler)
+    router.get("/hello2", handler2)
     router.export()
     client = await aiohttp_client(app)
 
@@ -153,3 +154,19 @@ async def test_route_inline_middleware(aiohttp_client, loop):
     assert resp.status == 200
     text = await resp.text()
     assert text == "error_info"
+
+    resp = await client.get("/hello2")
+    assert resp.status == 200
+    text = await resp.text()
+    assert text == "error"
+
+
+async def test_not_implement_method():
+    app = web.Application()
+    router = AioHttpRouter(app)
+
+    async def handler(request):
+        return web.Response(text="text")
+
+    with pytest.raises(NotImplementedError):
+        router.method(mt.HEAD, "/", handler)

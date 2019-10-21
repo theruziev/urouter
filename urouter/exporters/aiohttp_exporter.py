@@ -50,7 +50,7 @@ class AioHttpRouter(Router):
         self.method("*", pattern, handler)
 
     def method(self, method: str, pattern: str, handler: Callable, middlewares=None, name=None):
-        if method in [mt.HEAD.value, mt.TRACE.value, mt.CONNECT.value]:
+        if method in [mt.HEAD, mt.TRACE, mt.CONNECT]:
             raise NotImplementedError(f"Method: {method} not implemented.")
         super().method(method, pattern, handler, middlewares, name)
 

@@ -39,7 +39,7 @@ class Router:
         return self
 
     def handle(self, pattern: str, handler: Callable):
-        self.method(mt.ANY.value, pattern, handler)
+        self.method(mt.ANY, pattern, handler)
 
     def _get_inline_middlewares(self):
         middlewares = self._inline_middlewares
@@ -71,31 +71,31 @@ class Router:
         raise TypeError("Duplicate pattern and method")
 
     def connect(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.CONNECT.value, pattern, handler, name=name)
+        self.method(mt.CONNECT, pattern, handler, name=name)
 
     def delete(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.DELETE.value, pattern, handler, name=name)
+        self.method(mt.DELETE, pattern, handler, name=name)
 
     def get(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.GET.value, pattern, handler, name=name)
+        self.method(mt.GET, pattern, handler, name=name)
 
     def head(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.HEAD.value, pattern, handler, name=name)
+        self.method(mt.HEAD, pattern, handler, name=name)
 
     def options(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.OPTIONS.value, pattern, handler, name=name)
+        self.method(mt.OPTIONS, pattern, handler, name=name)
 
     def patch(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.PATCH.value, pattern, handler, name=name)
+        self.method(mt.PATCH, pattern, handler, name=name)
 
     def post(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.POST.value, pattern, handler, name=name)
+        self.method(mt.POST, pattern, handler, name=name)
 
     def put(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.PUT.value, pattern, handler, name=name)
+        self.method(mt.PUT, pattern, handler, name=name)
 
     def trace(self, pattern: str, handler: Callable, name: str = None):
-        self.method(mt.TRACE.value, pattern, handler, name=name)
+        self.method(mt.TRACE, pattern, handler, name=name)
 
     def get_handlers(self) -> Dict[tuple, Route]:
         return self._handlers

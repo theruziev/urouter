@@ -18,4 +18,4 @@ test:
 	fi
 
 freeze:
-	pipenv lcock -d
+	pipenv lock -d
