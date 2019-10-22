@@ -7,14 +7,18 @@ uRouter
 
 
 
-**This is POC, not for production use**
-
 Installation
 ------------
 
 .. code-block:: bash
 
     pip install urouter
+
+Supported web frameworks
+------------------------
+
+* aiohttp (`Example <tests/exporters/test_aiohttp_exporter.py>`_)
+* Starlette (`Example <tests/exporters/test_starlette_exporter.py>`_)
 
 Quickstart
 ----------
@@ -134,7 +138,6 @@ Quickstart
     from urouter.exporters.aiohttp_exporter import AioHttpRouter
     app = web.Application()
 
-    @web.middleware
     async def auth_middleware(request, handler):
 
         return web.HTTPForbidden()

@@ -3,8 +3,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
-[packages]
-
 [dev-packages]
 pytest = "*"
 aiohttp = "*"
@@ -14,7 +12,8 @@ codecov = "*"
 coverage = "*"
 black = "==19.3b0"
 sphinx = "*"
-
+urouter = {editable = true,path = "."}
+starlette = "*"
 
 [requires]
 python_version = "3.6"

@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Method(Enum):
+class Method(str, Enum):
     CONNECT = "CONNECT"
     DELETE = "DELETE"
     GET = "GET"
