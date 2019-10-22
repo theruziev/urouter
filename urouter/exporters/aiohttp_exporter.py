@@ -55,4 +55,6 @@ class AioHttpRouter(Router):
         super().method(method, pattern, handler, middlewares, name)
 
     def make_router(self):
-        return AioHttpRouter(self.app)
+        router = AioHttpRouter(self.app)
+        router._middlewares = self.middlewares.copy()
+        return router

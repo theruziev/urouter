@@ -1,6 +1,6 @@
 import logging
 from collections import defaultdict
-from typing import Dict, Callable, List
+from typing import Dict, Callable, List, Union
 
 from .constants import Method as mt
 
@@ -34,6 +34,10 @@ class Router:
         )  # pragma: no cover
         self._inline_middlewares = []
 
+    @property
+    def middlewares(self):
+        return self._middlewares
+
     def use(self, middleware: Callable):
         self._middlewares.append(middleware)
         return self
@@ -46,8 +50,8 @@ class Router:
         self._inline_middlewares = []
         return middlewares
 
-    def mount(self, pattern: str, router: "Router"):
-        handlers = router.get_handlers()
+    def mount(self, pattern: str, router: Union["Router", Callable[[], "Router"]]):
+        handlers = router.get_handlers() if isinstance(router, Router) else router().get_handlers()
         pattern = pattern[:-1] if pattern.endswith("/") else pattern
         for route in handlers.values():
             route_pattern = route.pattern[1:] if route.pattern.startswith("/") else route.pattern
