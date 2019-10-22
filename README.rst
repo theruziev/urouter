@@ -17,8 +17,8 @@ Installation
 Supported web frameworks
 ------------------------
 
-* aiohttp (`Example <tests/exporters/test_aiohttp_exporter.py>`_)
-* Starlette (`Example <tests/exporters/test_starlette_exporter.py>`_)
+* `aiohttp <https://github.com/theruziev/urouter/blob/master/tests/exporters/test_aiohttp_exporter.py>`_
+* `Starlette <https://github.com/theruziev/urouter/blob/master/tests/exporters/test_starlette_exporter.py>`_
 
 Quickstart
 ----------
