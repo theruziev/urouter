@@ -98,6 +98,44 @@ def test_route_use_middleware():
         return PlainTextResponse(content="test")
 
     app = Starlette()
+    example_middleware = ExampleMiddleware(app)
+    info_middleware = InfoMiddleware(app)
+    m3_middleware = CustomMiddleware3(app)
+    r = StarletteRouter(app).use(example_middleware).use(info_middleware)
+    r.include(m3_middleware).get("/hello", handler)
+    r.export()
+    client = TestClient(app)
+
+    resp = client.get("/hello")
+    assert resp.status_code == 200
+    assert resp.headers["m1"] == "Example"
+    assert resp.headers["m2"] == "info"
+    assert resp.headers["m3"] == "inline"
+
+
+def test_route_use_class_middleware():
+    class ExampleMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):
+            response = await call_next(request)
+            response.headers["m1"] = "Example"
+            return response
+
+    class InfoMiddleware(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):
+            response = await call_next(request)
+            response.headers["m2"] = "info"
+            return response
+
+    class CustomMiddleware3(BaseHTTPMiddleware):
+        async def dispatch(self, request, call_next):
+            response = await call_next(request)
+            response.headers["m3"] = "inline"
+            return response
+
+    async def handler(request):
+        return PlainTextResponse(content="test")
+
+    app = Starlette()
     r = StarletteRouter(app).use(ExampleMiddleware).use(InfoMiddleware)
     r.include(CustomMiddleware3).get("/hello", handler)
     r.export()
@@ -130,9 +168,12 @@ def test_route_inline_middleware():
         return PlainTextResponse(content="Test2")
 
     app = Starlette()
-    router = StarletteRouter(app).use(ExampleMiddleware)
+
+    example_middleware = ExampleMiddleware(app)
+    info_middleware = InfoMiddleware(app)
+    router = StarletteRouter(app).use(example_middleware)
     router.get("/hello", handler)
-    router.include(InfoMiddleware).get("/hello2", handler2)
+    router.include(info_middleware).get("/hello2", handler2)
 
     router.export()
     client = TestClient(app)

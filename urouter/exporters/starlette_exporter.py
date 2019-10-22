@@ -1,3 +1,4 @@
+import inspect
 import logging
 from typing import Callable
 
@@ -24,5 +25,9 @@ class StarletteRouter(Router):
         for route in self.get_handlers().values():
             r = Route(route.pattern, route.handler, methods=[route.method], name=route.name)
             for m in route.middlewares:
-                r.app = m(r.app)
+                if inspect.isclass(m):
+                    r.app = m(r.app)
+                else:
+                    m.app = r.app
+                    r.app = m
             self.app.router.routes.append(r)
