@@ -16,18 +16,22 @@ class StarletteRouter(Router):
         self.app = app
 
     def make_router(self):
-        return StarletteRouter(self.app)
+        router = StarletteRouter(self.app)
+        router._middlewares = self.middlewares.copy()
+        return router
 
     def handle(self, pattern: str, handler: Callable):
         raise TypeError("Method required for Starlette")
 
     def export(self):
         for route in self.get_handlers().values():
-            r = Route(route.pattern, route.handler, methods=[route.method], name=route.name)
-            for m in route.middlewares:
-                if inspect.isclass(m):
-                    r.app = m(r.app)
+            starlette_route = Route(
+                route.pattern, route.handler, methods=[route.method], name=route.name
+            )
+            for middleware in route.middlewares:
+                if inspect.isclass(middleware):
+                    starlette_route.app = middleware(starlette_route.app)
                 else:
-                    m.app = r.app
-                    r.app = m
-            self.app.router.routes.append(r)
+                    middleware.app = starlette_route.app
+                    starlette_route.app = middleware
+            self.app.router.routes.append(starlette_route)
