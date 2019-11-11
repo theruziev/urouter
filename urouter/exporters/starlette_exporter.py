@@ -1,3 +1,4 @@
+import copy
 import inspect
 import logging
 from typing import Callable
@@ -32,6 +33,7 @@ class StarletteRouter(Router):
                 if inspect.isclass(middleware):
                     starlette_route.app = middleware(starlette_route.app)
                 else:
-                    middleware.app = starlette_route.app
-                    starlette_route.app = middleware
+                    middleware_copy = copy.copy(middleware)
+                    middleware_copy.app = starlette_route.app
+                    starlette_route.app = middleware_copy
             self.app.router.routes.append(starlette_route)
