@@ -10,7 +10,7 @@ aiohttp = "*"
 pytest-asyncio = "*"
 codecov = "*"
 coverage = "*"
-black = "==19.10b0"
+black = "==21.4b2"
 sphinx = "*"
 urouter = {editable = true,path = "."}
 starlette = "*"
